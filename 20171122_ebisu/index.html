@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>app下のディレクトリどうする？</title>
+
+		<link rel="stylesheet" href="../css/reveal.css">
+		<link rel="stylesheet" href="../css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+		        <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
+            		 <script type="text/template">
+                        # RailsのつらみとHanami
+
+                        ---
+
+                        # Introduction
+                        ```
+                        class Engineer < Human
+                          def initialize
+                            @twitter    = "iTume"
+                            @kana       = "うめ"
+                            @work       = "Railsアプリのサーバーサイド"
+                            @since      = Date.new(2014, 9, 1)
+                            @ika        = "Rブラスターエリート"
+                          end
+                        end
+                        ```
+
+                        ---
+
+                        # Hanami？
+                        * Ruby製の軽量WAF
+                          - Hanami consumes 60% less memory than other full-featured Ruby frameworks.
+                        * 元はLotusという名前だった
+                        * http://hanamirb.org/
+                        * http://rubykaigi.org/2017/presentations/anton_davydov.html
+                        
+                        ---
+
+                        # Why Hanami?
+                        * Railsの辛いところなんとかできないか
+                        * Trailblazerも気になるけど
+
+                        ---
+
+                        # Railsのつらみ
+                        * controller太る -> コピペで増える影響範囲
+                        * helper太る     -> なぜそれをhelperに？
+                        * model太る      -> 読むの辛い
+                        * lib太る        -> カオス
+
+                        ---
+
+                        # 整理整頓の問題では
+                        * 責務の整理のルール
+                          * 動くけど、そいつにそれを任せる？
+                        * 置き場所に関するルール
+                          * Modelから切り出したものはどこへ？
+                          * AR継承してないClassはどこへ？
+
+                        ---
+
+                        # Hanamiはどうか
+                        
+                        ---
+
+                        # ディレクトリ構成
+                        ```
+                        ├apps/
+                        │  ├web/
+                        │  │  ├assets/
+                        │  │  ├config/
+                        │  │  ├controllers/
+                        │  │  │ └hoges
+                        │  │  │   ├create.rb
+                        │  │  │   ├index.rb
+                        │  │  │   └new.rb
+                        │  │  ├templates/
+                        │  │  ├views/
+                        │  │  └application.rb
+                        │  └(アプリを複数個置くことができる)
+                        ├config/
+                        ├db/
+                        ├lib/
+                        │  ├entities/
+                        │  │ └(ドメインロジック)
+                        │  ├mailers/
+                        │  └repositories/
+                        │    └(DBアクセスとかassociationとか)
+                        ```
+                        ---
+
+                        # Hanamiの構成
+
+                        ---
+
+                        # WAF
+                          * app"s"
+                            * 複数のアプリが同居する前提
+                          * DBアクセスはlib
+                            * appsがModelを共有できる
+                          * Clean Architecture
+                            * https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html
+
+                        ---
+
+                        # View
+                          * templateとviewを分離
+                            * templateはシンプルに
+                            * helper的なものがviewに
+
+                        ---
+
+                        # Controller
+                        * Controllerのファイルをaction別に分離
+                          * それぞれがpublicなcallメソッドを持ってる
+
+                        ---
+
+                        # Model
+                        * データアクセスとドメインロジックを分離
+                          * Repository（データアクセス）
+                          * Entity（ロジック）
+
+                        ---
+
+                        # Railsで真似できる？
+
+                        ---
+
+                        * viewはtemplateに専念
+                          * 表示ロジックは別Classに
+                        * Controllerは薄く、どんどん分ける
+                          * [DHHはどのようにRailsのコントローラを書くのか](http://postd.cc/how-dhh-organizes-his-rails-controllers/)
+                        * Modelからドメインロジックを分離
+                          * フツーのRuby Classにまとめていく
+                          * ActiveModel使う
+
+                        ---
+
+                        # どうなったか？
+                        ```
+                        ```
+
+                        ---
+                        
+                        :innocent:
+                        
+                        ---
+                        
+                        # Railに乗ってがんばっていきたい
+                                                
+                 	</script>
+                </section>
+			</div>
+		</div>
+
+		<script src="../lib/js/head.min.js"></script>
+		<script src="../js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: '../plugin/markdown/marked.js' },
+					{ src: '../plugin/markdown/markdown.js' },
+					{ src: '../plugin/notes/notes.js', async: true },
+					{ src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
