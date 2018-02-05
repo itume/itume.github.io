@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>app下のディレクトリどうする？</title>
+
+		<link rel="stylesheet" href="../css/reveal.css">
+		<link rel="stylesheet" href="../css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+		        <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
+            		 <script type="text/template">
+                        # RubyKaigiでもHanamiが気になる
+
+                        ---
+                        
+                        # Hanamiって
+                        * 前回もやってますよね。。。
+                        * [ねぇお花見しよ](https://twitter.com/s_osa_/status/905750550607626240)
+                        
+                        ---
+                        
+                        # Introduction
+                        ```
+                        def initialize
+                          @twitter    = "iTume"
+                          @kana       = "うめ"
+                          @work       = "でかいRailsアプリのサーバーサイド"
+                          @since      = Date.new(2014, 9, 1)
+                        end
+                        ```
+                        ---
+                        
+                        # RubyKaigiの思い出
+                        * データ分析系のセッション、WorkShopを覗いた
+                        * 型はあってもなくても。。。
+                          * 静的型付け言語の経験ないので
+                        * Octcatのシールをたくさんもらえて嬉しい
+                        
+                        ---
+
+                        # Why Hanami?
+                        * Railsの辛いところなんとかできないか
+                        * Trailblazerも気になるけど
+                        
+                        ---
+
+                        # Railsの辛いとこ
+                        * helper        -> スコープ広くてやばい
+                        * controller太る -> コピペコード蔓延して辛い
+                        * model太る      -> 読むの辛い
+                        * lib太る        -> カオス
+                        
+                        ---
+
+                        # 整理整頓の問題では
+                        * 置き場所に関するルール
+                          * Modelから切り出したものはどこへ？
+                        * 責務の整理のルール
+                          * 動くけど、そいつにそれを任せる？
+
+                        ---
+
+                        # Hanamiはどうか
+                        
+                        ---
+
+                        # ディレクトリ構成
+                        ```
+                        ├apps/
+                        │  ├web/
+                        │  │  ├assets/
+                        │  │  ├config/
+                        │  │  ├controllers/
+                        │  │  │ └hoges
+                        │  │  │   ├create.rb
+                        │  │  │   ├index.rb
+                        │  │  │   └new.rb
+                        │  │  ├templates/
+                        │  │  ├views/
+                        │  │  └application.rb
+                        │  └(アプリを複数個置くことができる)
+                        ├config/
+                        ├db/
+                        ├lib/
+                        │  ├entities/
+                        │  │ └(ドメインロジック)
+                        │  ├mailers/
+                        │  └repositories/
+                        │    └(DBアクセスとかassociationとか)
+                        ```
+                        ---
+
+                        # Hanamiにおける整理のルール
+
+                        ---
+
+                        # View
+                          * templateとviewを分離
+                            * templateはシンプルに
+                            * helper的なものをviewに
+
+                        ---
+
+                        # Controller
+                        * Controllerのファイルをaction別に分離
+                          * それぞれがpublicなcallメソッドを持ってる
+
+                        ---
+
+                        # Model
+                        * データアクセスとドメインロジックを分離
+                          * Repository
+                          * Entity
+
+                        ---
+
+                        # Railsでもいける
+                        * viewはtemplateに専念
+                          * 表示ロジックは別Classに
+                        * Controllerは薄く
+                          * [DHHはどのようにRailsのコントローラを書くのか](http://postd.cc/how-dhh-organizes-his-rails-controllers/)
+                        * Modelからドメインロジックを分離
+                          * include ActiveModel::Modelで結構頑張れる気がする
+
+                        ---
+
+                        # 気になるところ
+                        * app"s"である
+                          * 複数のアプリをapps以下に置ける
+                            * サービスと管理画面、とか？
+                        * 複数アプリでModelを共有
+                        
+                 	</script>
+                </section>
+			</div>
+		</div>
+
+		<script src="../lib/js/head.min.js"></script>
+		<script src="../js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: '../plugin/markdown/marked.js' },
+					{ src: '../plugin/markdown/markdown.js' },
+					{ src: '../plugin/notes/notes.js', async: true },
+					{ src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
