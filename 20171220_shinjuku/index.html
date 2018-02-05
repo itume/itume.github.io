@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>app下のディレクトリどうする？</title>
+
+		<link rel="stylesheet" href="../css/reveal.css">
+		<link rel="stylesheet" href="../css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+		        <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
+            		 <script type="text/template">
+                        # 2017年、踏んじゃった地雷まとめ
+
+                        ---
+
+                        # Introduction
+                        ```
+                        class Engineer < Human
+                          def initialize
+                            @twitter    = "iTume"
+                            @kana       = "うめ"
+                            @work       = "Railsアプリのサーバーサイド"
+                            @since      = Date.new(2014, 9, 1)
+                            @yoyogi     = "ひつじや"
+                          end
+                        end
+                        ```
+
+                        ---
+
+                        # 厄、色々ありました
+                        - プレミアムフライデー
+                          - 月末金曜日、大体毎回何かがおこる
+                        - 5年に一回のトラブル
+                          - を開始数ヶ月で引き当てる
+
+                        ---
+
+                        # おしながき
+                        - 突然のスロークエリ
+                        - 幻のお店
+                        - 神の手
+                        
+                        ---
+
+                        # 突然のスロークエリ
+                        - レポート情報を持ってるhoge_reportsテーブル
+                        - ある日突然超遅いクエリをバンバン吐き始めた(200秒)
+                        - 最近こんなとこ改修入れたっけ？・・・なし
+                        - 最近誰かテーブル触った？・・・なし
+                        - てかこんなテーブルあったっけ？
+
+                        ---
+
+                        # 突然のスロークエリ
+                        こんなテーブルだった
+                        
+                            def up
+                              create_table :hoge_reports do |t|
+                                t.integer  :xx_id,   null: false
+                                t.date     :report_date,     null: false
+                                t.integer  :hoge_count,      null: false
+                                t.integer  :fuga_count,      null: false  
+                                t.timestamp
+                              end
+                              add_index :hoge_reports, [report_date, xx_id], unique: true
+                            end
+
+                        ---
+
+                        # 突然のスロークエリ
+                        吐いてたのはこんな感じのクエリ
+                        
+                            SELECT * FROM hoge_reports WHERE report_date BETWEEN "2017-01-01" AND "2017-11-01" AND xx_id = 12121212;
+                        
+                        indexあるし、効いてそうに見えるんだけどなんで遅いんだろ
+                        
+                        ---
+
+                        # 突然のスロークエリ
+                        **結論**
+                        - indexは効いてなかった
+                          - xx_id単体のindexこそ必要
+                        - スロークエリは目立たないだけでずっと出てた
+                          - 全然アクセスのないページ
+                          - 超気に入っちゃった人が現れた
+
+                        ---
+
+                        **「ぜんぜんわからない　俺たちは雰囲気でindexを貼っている」**
+                        - ちゃんとexplainして。
+                        
+                        ---
+
+                        # 幻のお店
+                        - [censored]
+                          - うちのサイトにこのお店ない。。。
+                        - 改名した？ -> NO
+                        - 閉店したお店？ -> NO
+
+                        ---
+
+                        # 幻のお店
+                        **結論**
+                        - お店の名前っぽく見える文字化けだった。。。
+                        
+                        irb(main):073:0> "CENSORED".to_win31j.encode("UTF-8", "CP932")
+                            => "[censored]"
+
+                        ---
+                        
+                        **化けてますよ！**
+                        
+                        http://30min.jp/place/52542
+                        
+                        ---
+
+                        # 神の手
+                        - csvを介してデータ同期をしてるシステムがある
+                          - システムAからデータをcsvで出力(ボタン押下!!)
+                          - システムBにアップ（手動!!）
+                          - システムBからエクスポート
+                          - システムAにデータをcsvでインポート
+                        - 最近やたら連携ミス多くない？っていう時期があった
+
+                        ---
+
+                        # 神の手
+                        - 「データ連携失敗しました。見てください」
+                        - 「はい、調査します」
+                        
+                        - 「固定長のidのゼロ埋め飛んでるんですけど。。。」
+                        
+                        => csvアップ前にexcelで開いてた!!
+                        
+                        ---
+
+                        # 神の手
+                        - 「データ連携失敗しました。見てください」
+                        - 「はい、調査します」
+                        
+                        - 「ここの数値、こっちのシステムと違うんですけど。。。」
+                        
+                        => 数値修正をcsv上でやってた!!
+                        
+                        ---
+
+                        # 神の手
+                        - 「データ連携失敗しました。見てください」
+                        - 「はい、調査します」
+                        
+                        - 「このファイル、連携データにないカラムが入ってますね。。。」
+                        
+                        => 実は毎回フォーマット直してアップしてた!!
+                        
+                        ---
+
+                        # 神の手
+                        **結論**
+                        - システム間連携は機械にやらせよう
+                        - 引き継ぎ忘れてロストテクノロジー
+                        
+                        ---
+
+                        **Excelはなぜいつもエンジニアを困らせるのか**
+
+                        ---
+
+                        # 調査、大変ですよね。。。                        
+                                                
+                 	</script>
+                </section>
+			</div>
+		</div>
+
+		<script src="../lib/js/head.min.js"></script>
+		<script src="../js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: '../plugin/markdown/marked.js' },
+					{ src: '../plugin/markdown/markdown.js' },
+					{ src: '../plugin/notes/notes.js', async: true },
+					{ src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
