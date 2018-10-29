@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>お腹いっぱいrails newしたときの話</title>
+
+		<link rel="stylesheet" href="../css/reveal.css">
+		<link rel="stylesheet" href="../css/theme/beige.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../lib/css/beige.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+        <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
+          <script type="text/template">
+            ## お腹いっぱいrails newしたときの話
+
+            ---
+
+            # 0->1  ?
+            # 1->10 ?
+
+            ---
+
+            ## ゼロイチやりたい願望
+
+            * 仕事の多くは既存機能の改修案件
+            * まっさらな新機能作るのはわくわくする
+            * まっさらなrailsアプリならもっとわくわくする
+
+            ---
+
+            ## いつかは仕事でrails new
+
+            ---
+
+            ## initial commitを刻みたいじゃないか
+            * 作っては忘れ、作っては忘れ
+            * templateを作ってみた
+            * RSpecの初期設定ダルいな、と思った
+
+            ---
+
+            ## Railsのアプリケーションテンプレート
+            * rails new -m で.rbファイルを指定する
+            * ファイル内にDSLで書いたいろんなことをやってくれる
+            * [RailsGuides](https://railsguides.jp/rails_application_templates.html)
+
+            ---
+
+            ## 素振りの日々
+
+            ---
+
+            ## その時が来た
+            * 新しいrails
+            * 修行の成果を出すとき
+            * rails new . -B --database=mysql
+
+            ---
+
+            ## ？？？
+            * channels/application_cable
+            * いらなくね？
+
+            ---
+
+            ## やり直し
+
+            ---
+
+            ## rails new . -BC --database=mysql
+            * なんかPumaがいる
+
+            ---
+
+            ## やり直し
+
+            ---
+
+            ## rails new . -BCP --database=mysql
+            * RSpecじゃなくてTestUnitになってない？
+
+            ---
+
+            ## やり直し
+
+            ---
+
+            ## いい加減少し賢くなってきた
+
+            ---
+
+            ## rails new -h
+
+            ---
+
+            ## まとめ
+            * rails new にはいろんなオプションがある
+            * -mでテンプレートを渡してよしなに色々やってもらうことができる
+            * 使い方わからないときはmanとか--helpとか
+          </script>
+        </section>
+			</div>
+		</div>
+
+		<script src="../lib/js/head.min.js"></script>
+		<script src="../js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: '../plugin/markdown/marked.js' },
+					{ src: '../plugin/markdown/markdown.js' },
+					{ src: '../plugin/notes/notes.js', async: true },
+					{ src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
