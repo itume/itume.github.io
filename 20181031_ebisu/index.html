@@ -26,12 +26,18 @@
 			<div class="slides">
         <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
           <script type="text/template">
-            ## お腹いっぱいrails newしたときの話
+            # The 前座 talk
+            forkwellさんのために精一杯場を温めていきたい
 
             ---
 
-            # 0->1  ?
-            # 1->10 ?
+            rails new --database=mysql
+
+            ---
+
+            0->1  ?
+
+            1->10 ?
 
             ---
 
@@ -43,47 +49,48 @@
 
             ---
 
-            ## いつかは仕事でrails new
+            ## いつかは仕事で
+
+            rails new --database=mysql
 
             ---
 
-            ## initial commitを刻みたいじゃないか
+            ## 会社のリポジトリに
+            initial commit
+            ## 刻みたいじゃないか
+
+            ---
+
+            ## 素振りの日々
             * 作っては忘れ、作っては忘れ
             * templateを作ってみた
             * RSpecの初期設定ダルいな、と思った
 
             ---
 
-            ## Railsのアプリケーションテンプレート
-            * rails new -m で.rbファイルを指定する
+            ### アプリケーションテンプレート
+            ```
+            rails new -m template.rb
+            ```
+            * .rbファイルを指定する
             * ファイル内にDSLで書いたいろんなことをやってくれる
             * [RailsGuides](https://railsguides.jp/rails_application_templates.html)
-
-            ---
-
-            ## 素振りの日々
 
             ---
 
             ## その時が来た
             * 新しいrails
             * 修行の成果を出すとき
-            * rails new . -B --database=mysql
+            ```
+            rails new . -B --database=mysql
+            ```
 
             ---
 
-            ## ？？？
-            * channels/application_cable
-            * いらなくね？
-
-            ---
-
-            ## やり直し
-
-            ---
-
-            ## rails new . -BC --database=mysql
-            * なんかPumaがいる
+            ```
+            channels/application_cable
+            ```
+            いらないね
 
             ---
 
@@ -91,8 +98,10 @@
 
             ---
 
-            ## rails new . -BCP --database=mysql
-            * RSpecじゃなくてTestUnitになってない？
+            ```
+            rails new . -BC --database=mysql
+            ```
+            良さげだったけどPuma起動しちゃった
 
             ---
 
@@ -100,18 +109,30 @@
 
             ---
 
-            ## いい加減少し賢くなってきた
+            ```
+            rails new . -BCP --database=mysql
+            ```
+            RSpecじゃなくてTestUnitになってない？
 
             ---
 
-            ## rails new -h
+            ## やり直し
+
+            ---
+
+            ### いい加減少し賢くなってきた
+
+            ---
+
+            rails new -h
 
             ---
 
             ## まとめ
             * rails new にはいろんなオプションがある
             * -mでテンプレートを渡してよしなに色々やってもらうことができる
-            * 使い方わからないときはmanとか--helpとか
+            * 使い方はちゃんと調べよう
+
           </script>
         </section>
 			</div>
