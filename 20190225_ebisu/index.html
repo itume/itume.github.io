@@ -26,7 +26,115 @@
 			<div class="slides">
         <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
           <script type="text/template">
-                  ## 状態遷移が嫌い
+						## なぜ私は
+						## 状態遷移を嫌うのか
+
+						---
+
+						## 状態遷移？
+
+						```
+						# stateful_enumのサンプルコード
+						class Bug < ApplicationRecord
+
+							## enumでstatusを定義
+							enum status: {unassigned: 0, assigned: 1, resolved: 2, closed: 3} do
+								## 状態遷移メソッドを定義
+								event :assign do
+									transition :unassigned => :assigned
+								end
+
+								event :resolve do
+									before do
+										self.resolved_at = Time.zone.now
+									end
+
+									transition [:unassigned, :assigned] => :resolved
+								end
+
+								event :close do
+									after do
+										Notifier.notify "Bug##{id} has been closed."
+									end
+
+									transition all - [:closed] => :closed
+								end
+							end
+						end
+						```
+
+						---
+
+						## Railsで状態遷移といえば
+
+						* [aasm](https://github.com/aasm/aasm)
+						* [acts_as_state_machine](https://github.com/jcnetdev/acts_as_state_machine)
+						* [stateful_enum](https://github.com/amatsuda/stateful_enum)
+
+						---
+
+						## なぜ嫌いなのか
+
+						辛いコードをたくさん見てきたから
+
+
+						---
+
+						## 何が辛かったのか？
+
+						改めて、辛いコードと向き合ってみた。
+
+						---
+
+						## 例えばこんな感じ
+
+						---
+
+						## 幼虫->蛹->蝶
+
+						* あるstateの時にしか叩けないメソッドがある
+							* 幼虫は一定の大きさになると脱皮する
+							* 蛹の時はご飯食べない
+							* 蝶になると飛べる
+						* あるstateの時にしか意味をなさないカラムがある
+							* 色(幼虫以外は固定値しか返らない)
+							* 空腹度（蛹は飯食わない）
+
+						---
+
+						## そんなアプリ作る？
+
+						---
+
+						## 申し込みテーブル
+
+						* 申し込み種別をtypeで管理
+						* typeによってはskipするstateがある
+						* typeによっては遷移時に何かをやったりする
+						* typeによる振る舞いの変化は別クラスへの移譲で表現されていた（Strategyパターンを使っている、と書いてあった）
+
+						---
+
+						ここまで書いてみて、違和感を感じた
+						---
+
+						## 結論
+
+						辛かったのは状態遷移じゃなくて、状態遷移 と type別に変わる振る舞いの掛け算
+
+						->typeによってskipするstateがあるってことは、typeではなく別物として扱うべきだった？
+
+						---
+
+						## ちなみに...あなたはどのgem?
+
+						* [aasm](https://github.com/aasm/aasm)
+						* [acts_as_state_machine](https://github.com/jcnetdev/acts_as_state_machine)
+						* [stateful_enum](https://github.com/amatsuda/stateful_enum)
+
+						---
+
+						end
 
           </script>
         </section>
